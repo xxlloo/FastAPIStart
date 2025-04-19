@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from api.v1.endpoints.auth import auth_router
 from config.config import settings
 from core.db import init_create_tables
 from utils.logger import logger
@@ -18,10 +19,11 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    debug=settings.debug,
-    title=settings.title,
-    description=settings.description,
-    version=settings.version,
+    title=settings.TITLE,
+    host=settings.HOST,
+    port=settings.PORT,
+    version=settings.VERSION,
+    debug=settings.DEBUG,
 
     lifespan=lifespan,
 )
@@ -34,3 +36,6 @@ async def read_root():
     return {
         "database_url": settings.ASYNC_DATABASE_URI,
     }
+
+
+app.include_router(auth_router)

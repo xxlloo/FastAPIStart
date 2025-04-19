@@ -9,13 +9,12 @@ _env_files = [".env", f".env.{_env}"]
 
 
 class Settings(BaseSettings):
-    debug: Optional[bool] = None
-    title: Optional[str] = None
-    description: Optional[str] = None
-    version: Optional[str] = None
+    TITLE: Optional[str]
 
     HOST: Optional[str] = None
     PORT: Optional[int] = None
+    VERSION: Optional[str] = None
+    DEBUG: bool = None
 
     REDIS_URL: Optional[str] = None
     REDIS_POOL_MINSIZE: Optional[int] = None

@@ -1,4 +1,5 @@
 from fastapi.exceptions import HTTPException, RequestValidationError
+from sqlalchemy.exc import SQLAlchemyError
 from starlette import status
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -30,4 +31,15 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         status_code=exc.status_code,
         content=exc.detail,
         headers=exc.headers,
+    )
+
+
+@app.exception_handler(SQLAlchemyError)
+async def sql_exception_handler(request: Request, exc: SQLAlchemyError):
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content={
+            "code": 500,
+            "detail": "Database execution error, please try again later.",
+        },
     )
