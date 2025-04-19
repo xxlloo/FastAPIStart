@@ -1,0 +1,40 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+.venv/
+ENV/
+.env/
+
+# FastAPI specific files
+*.sqlite3
+*.db
+*.log
+
+# IDE/Editor folders and files
+.vscode/
+.idea/
+
+# Python packaging
+*.egg-info/
+dist/
+build/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Test output
+pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+
+
+# Misc
+*.bak
+*.swp
