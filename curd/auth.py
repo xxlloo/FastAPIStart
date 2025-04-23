@@ -7,7 +7,7 @@ from models.auth import JwtToken, Users
 class AuthCRUD:
 
     @staticmethod
-    async def get_user_by_username(db: AsyncSession, username: str) -> Users | None:
+    async def get_user_by_username(db: AsyncSession, username: str) -> Users:
         """
         Get user by username
         :param db:

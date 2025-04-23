@@ -9,7 +9,7 @@ _env_files = [".env", f".env.{_env}"]
 
 
 class Settings(BaseSettings):
-    TITLE: Optional[str]
+    TITLE: Optional[str] = None
 
     HOST: Optional[str] = None
     PORT: Optional[int] = None
@@ -17,9 +17,13 @@ class Settings(BaseSettings):
     DEBUG: bool = None
 
     REDIS_URL: Optional[str] = None
-    REDIS_POOL_MINSIZE: Optional[int] = None
-    REDIS_POOL_MAXSIZE: Optional[int] = None
-    REDIS_CONNECT_TIMEOUT: Optional[int] = None
+    MIN_POOL_SIZE: Optional[int] = None
+    MAX_POOL_SIZE: Optional[int] = None
+    TIMEOUT: Optional[int] = None
+    DECODE_RESPONSES: Optional[bool] = None
+    ENCODING: Optional[str] = None
+    SSL: Optional[bool] = None
+    REDIS_DB : Optional[int] = None
 
     SECRET_KEY: Optional[str] = None
     ALGORITHM: Optional[str] = None

@@ -1,5 +1,15 @@
+```python
+# None bool int float
+# List tuple dict set frozenset deque
+# datetime.date datetime.time datetime.datetime UUID bytes Decimal
+
+
+
+```
+
+
+
 ```shell
-# 加载生产环境的 .env 文件
 APP_ENV=prod uvicorn main:app --reload
 ```
 
