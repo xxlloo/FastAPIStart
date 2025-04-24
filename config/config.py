@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     DECODE_RESPONSES: Optional[bool] = None
     ENCODING: Optional[str] = None
     SSL: Optional[bool] = None
-    REDIS_DB : Optional[int] = None
+    REDIS_DB: Optional[int] = None
 
     SECRET_KEY: Optional[str] = None
     ALGORITHM: Optional[str] = None
@@ -31,6 +31,11 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: Optional[int] = None
 
     ASYNC_DATABASE_URI: Optional[str] = None
+
+    SMTP_SERVER: Optional[str] = None
+    SMTP_PORT: Optional[int] = None
+    SENDER_EMAIL: Optional[str] = None
+    SENDER_PASSWORD: Optional[str] = None
 
     model_config = SettingsConfigDict(
         env_file=_env_files, env_file_encoding="utf-8", extra="allow"

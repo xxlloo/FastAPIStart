@@ -1,9 +1,5 @@
 import uvicorn
 
-from fastapi.exceptions import HTTPException, RequestValidationError
-from pydantic import BaseModel
-from starlette.responses import JSONResponse
-
 from main import app
 
 if __name__ == "__main__":

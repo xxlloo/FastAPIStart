@@ -1,14 +1,18 @@
 from datetime import datetime, timedelta, timezone
 
-from fastapi import HTTPException
+from fastapi import BackgroundTasks, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from config.config import settings
 from core.security import create_access_token, create_refresh_token, verify_token
 from curd.auth import AuthCRUD
+from dependencies.email import get_email_sender
 from models.auth import JwtToken
-from schemas.auth import UserLoginByUserName, UserLoginResponse
+from schemas.auth import Register, UserLoginByUserName, UserLoginResponse
+from schemas.response import success_response
+from utils.captcha import CaptchaUtils
+from utils.email import  EmailSender
 from utils.password import PasswordUtil
 
 
@@ -108,3 +112,32 @@ class AuthService:
             refresh_token=selected_token.token,
             token_type="bearer",
         )
+
+    @staticmethod
+    async def send_register_email(
+        db: AsyncSession,
+        user: Register,
+        bg_task: BackgroundTasks,
+        email_sender: EmailSender = Depends(get_email_sender),
+    ):
+        selected_user_by_username = await AuthCRUD.get_user_by_username(
+            db, user.username
+        )
+        selected_user_by_email = await AuthCRUD.get_user_by_username(db, user.email)
+        if selected_user_by_username or selected_user_by_email:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Username already registered",
+            )
+        random_code = CaptchaUtils().generate_random_code()
+        # todo: set redis
+        print(user.email, type(user.email))
+
+        bg_task.add_task(
+            email_sender.send_email,
+            recipient_emails=[user.email],
+            subject=f"用户{user.username}注册验证码",
+            body=f"注册验证码是{random_code}",
+        )
+
+        return success_response("发送验证码成功")

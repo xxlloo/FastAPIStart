@@ -1,7 +1,6 @@
 from contextlib import asynccontextmanager
 
-import aioredis
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 from api.v1.endpoints.auth import auth_router
 from config.config import settings

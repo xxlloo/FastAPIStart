@@ -7,10 +7,11 @@
 
 ```
 
-
+# dependency-injector
+# Lagom
 
 ```shell
-APP_ENV=prod uvicorn main:app --reload
+APP_ENV=prod uvicorn run:app  --workers 5   --reload 
 ```
 
 ```shell
