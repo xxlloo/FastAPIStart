@@ -1,6 +1,8 @@
+import aioredis
 from fastapi import APIRouter, BackgroundTasks, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from dependencies.cache import get_redis
 from dependencies.db import get_db_session
 from dependencies.email import get_email_sender
 from schemas.auth import Register, UserLoginByUserName, UserLoginResponse
@@ -31,5 +33,6 @@ async def register(
     bg_task: BackgroundTasks,
     db: AsyncSession = Depends(get_db_session, use_cache=True),
     email_sender: EmailSender = Depends(get_email_sender, use_cache=True),
+    redis: aioredis.Redis = Depends(get_redis, use_cache=True),
 ):
-    return await AuthService.send_register_email(db, user, bg_task, email_sender)
+    return await AuthService.send_register_email(db, user, bg_task, email_sender, redis)
