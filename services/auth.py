@@ -47,14 +47,14 @@ class AuthService:
 
     @staticmethod
     async def login_username(
-            db: AsyncSession,
-            form_data: UserLoginByUserName,
+        db: AsyncSession,
+        form_data: UserLoginByUserName,
     ) -> UserLoginResponse:
         password_util = PasswordUtil()
         selected_user = await AuthCRUD.get_user_by_username(db, form_data.username)
 
         if not selected_user or not password_util.verify_bcrypt(
-                form_data.password, selected_user.password_hash
+            form_data.password, selected_user.password_hash
         ):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -76,7 +76,7 @@ class AuthService:
 
     @staticmethod
     async def refresh_access_token(
-            db: AsyncSession, refresh_token: str
+        db: AsyncSession, refresh_token: str
     ) -> UserLoginResponse:
 
         payload = verify_token(refresh_token)
@@ -115,11 +115,11 @@ class AuthService:
 
     @staticmethod
     async def send_register_email(
-            db: AsyncSession,
-            user: Register,
-            bg_task: BackgroundTasks,
-            email_sender: EmailSender,
-            redis: aioredis.Redis,
+        db: AsyncSession,
+        user: Register,
+        bg_task: BackgroundTasks,
+        email_sender: EmailSender,
+        redis: aioredis.Redis,
     ):
         selected_user_by_username = await AuthCRUD.get_user_by_username(
             db, user.username
@@ -131,7 +131,8 @@ class AuthService:
                 detail="Username already registered",
             )
         random_code = CaptchaUtils().generate_random_code()
-        await redis.set(user.email, random_code)
+        email_code_key = f"auth:code:{user.username}"
+        await redis.set(email_code_key, random_code)
         print(user.email, type(user.email))
 
         bg_task.add_task(
