@@ -8,6 +8,7 @@
 ```
 
 # dependency-injector
+
 # Lagom
 
 ```shell
@@ -16,4 +17,16 @@ APP_ENV=prod uvicorn run:app  --workers 5   --reload
 
 ```shell
 lefthook run pre-commit  --all-files 
+```
+
+```shell
+APP_ENV=prod celery -A celery_app.celery_app worker --loglevel=info
+```
+
+```shell
+APP_ENV=prod  celery -A celery_app.celery_app beat --loglevel=info
+```
+
+```shell
+APP_ENV=prod celery -A celery_app.celery_app flower
 ```

@@ -37,6 +37,15 @@ class Settings(BaseSettings):
     SENDER_EMAIL: Optional[str] = None
     SENDER_PASSWORD: Optional[str] = None
 
+    MONGODB_URL: Optional[str] = None
+    MONGODB_NAME: Optional[str] = None
+
+    RABBITMQ_USER: Optional[str] = None
+    RABBITMQ_PASSWORD: Optional[str] = None
+    RABBITMQ_HOST: Optional[str] = None
+    RABBITMQ_PORT: Optional[int] = None
+    RABBITMQ_VHOST: Optional[str] = None
+
     model_config = SettingsConfigDict(
         env_file=_env_files, env_file_encoding="utf-8", extra="allow"
     )

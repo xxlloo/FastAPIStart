@@ -1,10 +1,9 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 
 from api.v1.endpoints.auth import auth_router
 from config.config import settings
-
 from core.db import init_create_tables
 
 from utils.logger import logger

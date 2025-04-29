@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from config.config import settings
+from core.mongo import MongoDB
 from core.security import create_access_token, create_refresh_token, verify_token
 from curd.auth import AuthCRUD
 from models.auth import JwtToken
@@ -13,6 +14,7 @@ from schemas.auth import Register, UserLoginByUserName, UserLoginResponse
 from schemas.response import success_response
 from utils.captcha import CaptchaUtils
 from utils.email import EmailSender
+from utils.logger import logger
 from utils.password import PasswordUtil
 
 
@@ -120,11 +122,12 @@ class AuthService:
         bg_task: BackgroundTasks,
         email_sender: EmailSender,
         redis: aioredis.Redis,
+        mongo: MongoDB,
     ):
         selected_user_by_username = await AuthCRUD.get_user_by_username(
             db, user.username
         )
-        selected_user_by_email = await AuthCRUD.get_user_by_username(db, user.email)
+        selected_user_by_email = await AuthCRUD.get_user_by_email(db, user.email)
         if selected_user_by_username or selected_user_by_email:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -134,6 +137,20 @@ class AuthService:
         email_code_key = f"auth:code:{user.username}"
         await redis.set(email_code_key, random_code)
         print(user.email, type(user.email))
+
+        auth_con = mongo.db["auth"]
+        mongo_insert = await auth_con.insert_one(
+            {"code": random_code, "username": user.username}
+        )
+
+        insert_select = await auth_con.find_one({"_id": mongo_insert.inserted_id})
+
+        if not insert_select:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        logger.info(insert_select)
 
         bg_task.add_task(
             email_sender.send_email,
