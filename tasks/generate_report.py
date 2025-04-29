@@ -1,6 +1,7 @@
 import time
 
 from celery_app import celery_app
+
 from utils.logger import logger
 
 

@@ -20,7 +20,7 @@ lefthook run pre-commit  --all-files
 ```
 
 ```shell
-APP_ENV=prod celery -A celery_app.celery_app worker --loglevel=info
+APP_ENV=prod celery -A celery_app.celery_app worker  -Q send_email,generate_report --loglevel=info
 ```
 
 ```shell

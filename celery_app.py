@@ -1,10 +1,8 @@
 from datetime import timedelta
 
-from celery import Celery
-from celery.schedules import crontab
+from celery import Celery, group, chain
 
 from config.config import settings
-from utils.email import EmailSender
 
 RABBITMQ_URL = f"amqp://{settings.RABBITMQ_USER}:{settings.RABBITMQ_PASSWORD}@{settings.RABBITMQ_HOST}:{settings.RABBITMQ_PORT}/{settings.RABBITMQ_VHOST}"
 
@@ -28,11 +26,20 @@ celery_app.conf.update(
     broker_connection_max_retries=100,
     worker_heartbeat_sec=10,
     timezone='Asia/Shanghai',
+    broker_heartbeat=10,
+    worker_concurrency=8,
+    task_routes={
+        "tasks.send_email": {
+            'queue': 'send_email',
+        },
+        "tasks.generate_report": {
+            'queue': 'generate_report',
+        }
+    },
     beat_schedule={
         'hourly-report': {
             'task': 'tasks.generate_report',
-            # 'schedule': crontab(minute=5),
-            'schedule' :timedelta(seconds=10),
+            'schedule': timedelta(seconds=10),
             'args': ('zhangsan',)
         }
     }

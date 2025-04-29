@@ -23,7 +23,7 @@ class InvalidRecipientError(EmailServiceError):
 
 class EmailSender:
     def __init__(
-            self, smtp_server: str, smtp_port: int, sender_email: str, sender_password: str
+        self, smtp_server: str, smtp_port: int, sender_email: str, sender_password: str
     ):
         self.smtp_server = smtp_server
         self.smtp_port = smtp_port
@@ -58,7 +58,7 @@ class EmailSender:
             raise EmailServiceError(f"SMTP连接失败: {str(e)}") from e
 
     def send_email(
-            self, recipient_emails: List[str], subject: str, body: str, html: bool = False
+        self, recipient_emails: List[str], subject: str, body: str, html: bool = False
     ):
         # 验证收件人
         valid_recipients = self._validate_recipients(recipient_emails)
