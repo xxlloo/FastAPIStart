@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from api.v1.endpoints.auth import auth_router
+from api.v1.endpoints.ws import ws_router
 from config.config import settings
 from core.db import init_create_tables
 
@@ -32,3 +33,4 @@ async def lifespan(app: FastAPI):
 app.lifespan = lifespan
 
 app.include_router(auth_router)
+app.include_router(ws_router)

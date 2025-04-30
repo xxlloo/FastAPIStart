@@ -12,6 +12,7 @@ from curd.auth import AuthCRUD
 from models.auth import JwtToken
 from schemas.auth import Register, UserLoginByUserName, UserLoginResponse
 from schemas.response import success_response
+
 from utils.captcha import CaptchaUtils
 from utils.email import EmailSender
 from utils.logger import logger
